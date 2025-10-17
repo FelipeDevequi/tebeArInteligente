@@ -1,15 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 import "./App.css";
 
 function App() {
@@ -46,8 +36,7 @@ function App() {
         `https://api.iotebe.com/v2/spot/${selectedSpotId}/ng1vt/global_data/data`,
         { headers: { "x-api-key": API_KEY } }
       );
-
-      // Assume que a API retorna um array de leituras
+      
       const data = res.data.map((item) => ({
         time: new Date(item.timestamp).toLocaleTimeString(),
         temp: item.temperature,
@@ -79,7 +68,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>🌐 Monitoramento IoTebe</h1>
+      <h1>Monitoramento Ar -Tebe</h1>
 
       {loading && <p className="loading">Carregando...</p>}
 
@@ -93,7 +82,7 @@ function App() {
               </option>
             ))}
           </select>
-          {selectedSpotId && <button onClick={fetchSpotData}>🔄 Atualizar</button>}
+          {selectedSpotId && <button onClick={fetchSpotData}>Atualizar</button>}
         </div>
       )}
 
@@ -109,25 +98,6 @@ function App() {
               </div>
             ))}
           </div>
-
-          {chartData.length > 0 && (
-            <div className="chart-container">
-              <h3>📊 Variação de Dados</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,229,255,0.2)" />
-                  <XAxis dataKey="time" stroke="#7ee7ff" />
-                  <YAxis stroke="#7ee7ff" />
-                  <Tooltip contentStyle={{ background: "#0d1b2a", border: "1px solid #00e5ff" }} />
-                  <Legend />
-                  <Line type="monotone" dataKey="temp" stroke="#00e5ff" name="Temperatura" />
-                  <Line type="monotone" dataKey="velAxial" stroke="#ff6b6b" name="Vel. Axial" />
-                  <Line type="monotone" dataKey="velHorizontal" stroke="#00ff9d" name="Vel. Horizontal" />
-                  <Line type="monotone" dataKey="velVertical" stroke="#ffa600" name="Vel. Vertical" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          )}
         </div>
       )}
     </div>
